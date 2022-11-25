@@ -15,12 +15,13 @@ const UsersPanel = () => {
   const [error, setError] = useState(null);
   const [checkboxAll, setCheckboxAll] = useState(false);
   const navigate = useNavigate();
+  const BASE_URL = "https://admin-panel-task4.herokuapp.com/";
 
   const getAllUsers = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const url = "https://admin-panel-task4.herokuapp.com/api/all";
+      const url = `${BASE_URL}api/all`;
       const { data, status } = await axios.get(url, {
         headers: { authorization: localStorage.getItem("token") },
       });
@@ -39,12 +40,12 @@ const UsersPanel = () => {
   const blockHandler = async () => {
     try {
       if (checkboxAll) {
-        const url = "https://admin-panel-task4.herokuapp.com/api/updateAll";
+        const url = `${BASE_URL}api/updateAll`;
         await axios.put(url, { users, status: false });
         localStorage.removeItem("token");
         navigate("/login");
       } else {
-        const url = "https://admin-panel-task4.herokuapp.com/api/update";
+        const url = `${BASE_URL}api/update`;
         const { data: res } = await axios.put(url, checkedUsersBlock);
         if (res.find((item) => item._id === currentId)) {
           localStorage.removeItem("token");
@@ -67,11 +68,11 @@ const UsersPanel = () => {
   const unBlockHandler = async () => {
     try {
       if (checkboxAll) {
-        const url = "https://admin-panel-task4.herokuapp.com/api/updateAll";
+        const url = `${BASE_URL}api/updateAll`;
         await axios.put(url, { users, status: true });
         await getAllUsers();
       } else {
-        const url = "https://admin-panel-task4.herokuapp.com/api/update";
+        const url = `${BASE_URL}api/update`;
         await axios.put(url, checkedUsersUnblock);
         await getAllUsers();
       }
@@ -89,7 +90,7 @@ const UsersPanel = () => {
   const deleteHandler = async () => {
     try {
       if (checkboxAll) {
-        const url = "https://admin-panel-task4.herokuapp.com/api/deleteAll";
+        const url = `${BASE_URL}api/deleteAll`;
         await axios.delete(url, {
           data: { users },
         });
@@ -98,7 +99,7 @@ const UsersPanel = () => {
         setCheckedIdDelete([]);
         navigate("/signup");
       } else {
-        const url = "https://admin-panel-task4.herokuapp.com/api/delete";
+        const url = `${BASE_URL}api/delete`;
         const { data: res } = await axios.delete(url, {
           data: { deleteIds: checkedIdDelete },
         });
